@@ -35,6 +35,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define DIGW 0.06
 #define DIGH 0.12
 
+#define MAX(a,b) (((a) >= (b)) ? (a) : (b))
+#define MIN(a,b) (((a) < (b)) ? (a) : (b))
+
+float inline frand() { return (float)rand() / (float)(RAND_MAX); }; //returns from 0 to 1
+
 /*
 Pong! Input is yet another hack. It's meant to be used with one or two PS3
 controllers connected via event devices. Dealing with permissions is left as
@@ -143,11 +148,11 @@ int main (int argc, char *argv[])
 	params.on_speed = 2.0/100.0;
 	params.off_speed = 2.0/20.0;
 	params.start_wait = 12;
-	params.start_dwell = 3;
+	params.start_dwell = 12; // 3
 	params.curve_dwell = 0;
-	params.corner_dwell = 12;
+	params.corner_dwell = 12; // 12 default
 	params.curve_angle = cosf(30.0*(M_PI/180.0)); // 30 deg
-	params.end_dwell = 3;
+	params.end_dwell = 12; // 3
 	params.end_wait = 10;
 	params.snap = 1/100000.0;
 	params.render_flags = RENDER_GRAYSCALE;
@@ -264,13 +269,18 @@ int main (int argc, char *argv[])
 		}
 
 		p1 += ftime*eb1pos;
+
+                p1 = by - ((PH / 2) + (BH * 2) + frand() * 1.5 * BH); // dennis auto-paddle
+
 		if (p1 < 0)
 			p1 = 0;
 		if (p1 > HEIGHT-PH)
 			p1 = HEIGHT-PH;
 
-
 		p2 += ftime*eb2pos;
+
+                p2 = by - ((PH / 2) - (BH * 3) - frand() * 1.5 * BH); // dennis auto-paddle
+
 		if (p2 < 0)
 			p2 = 0;
 		if (p2 > HEIGHT-PH)
@@ -288,6 +298,7 @@ int main (int argc, char *argv[])
 			} else {
 				bdx = -bdx;
 				bx += 2*ftime*bdx;
+                                bdy = ((p1 + PH / 2) - (by + BH / 2)) * -bdx * 20;
 			}
 		} else if (bx > WIDTH - BW) {
 			if (by < p2-BH || by > p2+PH) {
@@ -301,10 +312,11 @@ int main (int argc, char *argv[])
 			} else {
 				bdx = -bdx;
 				bx += 2*ftime*bdx;
+                                bdy = ((p2 + PH / 2) - (by + BH / 2)) * bdx * 20;
 			}
 		}
 
-		bdx *= powf(1.1, ftime);
+		bdx *= powf(1.05, ftime);
 
 		frames++;
 		time += ftime;

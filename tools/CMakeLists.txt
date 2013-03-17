@@ -38,4 +38,4 @@ else()
   message(STATUS "Will NOT build simulator (OpenGL or GLUT missing)")
 endif()
 
-add_subdirectory(qplayvid)
+#add_subdirectory(qplayvid)

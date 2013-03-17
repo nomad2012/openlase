@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 #         OpenLase - a realtime laser graphics toolkit
 #
@@ -29,16 +30,17 @@ params.off_speed = 2/30.0
 params.flatness = 0.000001
 ol.setRenderParams(params)
 
-lines = sys.argv[1:]
+lines = sys.argv[2:]
+height = float(sys.argv[1])
 
 while True:
 	lc = len(lines)
 
 	font = ol.getDefaultFont()
-	yoff = (lc/2.0) * 0.3
+	yoff = (lc/2.0) * height
 
 	for i,line in enumerate(lines):
-		w = ol.getStringWidth(font, 0.3, line)
-		ol.drawString(font, (-w/2,yoff-i*0.3), 0.3, ol.C_WHITE, line)
+		w = ol.getStringWidth(font, height, line)
+		ol.drawString(font, (-w/2,yoff-i*height), height, ol.C_WHITE, line)
 
 	ftime = ol.renderFrame(60)
