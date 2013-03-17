@@ -1,0 +1,17 @@
+#!/bin/bash
+while [ 1 ]; do
+      pushd ~/git/openlase/build/dennis
+      ./demo
+      popd
+      pushd ~/git/openlase/build/examples
+      ./pong &
+      sleep 20
+      kill %%
+      popd
+      pushd ~/git/openlase/build/tools
+      ./playvid badapple.flv
+      ./playvid walkingguy1.flv
+      ./playvid assumptionSong.flv
+      ./playvid walkingguy2.flv
+      popd
+done
